@@ -258,7 +258,7 @@ This project fulfills all requirements of the Urban Mobility Data Explorer assig
 
 ## 🎥 Video Walkthrough
 
-[Link to 5-minute video demonstration will be added here]
+[(https://drive.google.com/file/d/1dRmS8M8AM3lYhKw4oXMSpQfaZMEKFG7C/view?usp=sharing)]
 
 The video demonstrates:
 - System overview and architecture
@@ -267,9 +267,7 @@ The video demonstrates:
 - Technical implementation highlights
 - Key insights and interpretations
 
-## 👥 Contributors
 
-[Your name/team names here]
 
 ## 📄 License
 

@@ -41,3 +41,5 @@ server/public
 vite.config.ts.*
 *.tar.gz
 train.csv
+
+attached_assets/train_1761323433432.csv

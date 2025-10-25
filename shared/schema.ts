@@ -108,10 +108,25 @@ export type SpeedDistribution = {
   tripCount: number;
 };
 
+export type PickupLocation = {
+  latitude: number;
+  longitude: number;
+  tripCount: number;
+  locationName?: string;
+};
+
+export type SpeedDistanceCorrelation = {
+  speed: number;
+  distance: number;
+  tripCount: number;
+};
+
 export type InsightData = {
   hourlyDistribution: HourlyDistribution[];
   dayDistribution: DayDistribution[];
   speedDistribution: SpeedDistribution[];
   peakHours: { hour: number; tripCount: number }[];
   distanceVsDuration: { distance: number; duration: number; speed: number }[];
+  topPickupLocations: PickupLocation[];
+  speedDistanceCorrelation: SpeedDistanceCorrelation[];
 };

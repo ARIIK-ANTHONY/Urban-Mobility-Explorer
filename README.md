@@ -15,8 +15,8 @@ A comprehensive full-stack web application for exploring and analyzing New York 
 
 ## 📋 Prerequisites
 
-- Node.js 20.x or higher
-- PostgreSQL database
+- Node.js 22.x or higher (Node 20+ may work, but this project was developed and tested on Node 22)
+- PostgreSQL database (Neon serverless or local Postgres)
 - npm or yarn package manager
 
 ## 🛠️ Installation
@@ -49,15 +49,49 @@ A comprehensive full-stack web application for exploring and analyzing New York 
    
    Place the `train.csv` file from the NYC Taxi Trip dataset in the `attached_assets/` directory.
 
+## 🧭 Available npm scripts
+
+The project includes several npm scripts you can run from the project root. Useful ones:
+
+```bash
+# Start frontend + backend in development (recommended)
+npm run dev
+
+# Build production frontend and bundle backend
+npm run build
+
+# Start the production bundle (after build)
+npm start
+
+# Typecheck the project
+npm run check
+
+# Push schema migrations (Drizzle)
+npm run db:push
+
+# Run the streaming data processor (default behavior reads sample / safe mode)
+npm run process-data
+
+# Run full processing (process the entire CSV)
+npm run process-data:full
+
+# Clear DB and reload full dataset (careful: deletes trip records)
+npm run db:reload
+```
+
+Add these scripts to your workflow as needed. Some commands (like `db:reload` and `process-data:full`) will modify or replace database contents.
+
 ## 🏃 Running the Application
 
 ### Development Mode
 
-Start both frontend and backend servers:
+Start the development server (the Express server integrates Vite middleware and serves the frontend):
 
 ```bash
 npm run dev
 ```
+
+Note: `npm run dev` launches the backend which also mounts Vite in middleware mode so the frontend is served automatically at `http://localhost:5000` during development.
 
 The application will be available at:
 - Frontend: `http://localhost:5000`
@@ -97,6 +131,39 @@ npm run process-data
 ```
 
 Note: This process may take several minutes depending on the dataset size.
+
+### Run backend only (useful during recording/testing)
+
+If you want to run only the backend API without the full dev stack, run:
+
+```powershell
+$env:NODE_ENV="development"; npx tsx server/index.ts
+```
+
+The backend listens on port `5000` by default. On Windows, binding to `127.0.0.1` is enforced in the server to avoid `ENOTSUP` issues that occur when binding to `0.0.0.0`.
+
+### ETL / Processing notes
+
+- `npm run process-data` runs the processor in its default (safe/sample) mode for development.
+- `npm run process-data:full` runs the full import of `train.csv` — this will process the entire file and may take significant time and database writes.
+- `npm run db:reload` clears the `trips` table before re-importing; use with caution (it deletes data).
+
+### CSV export and large dataset caveat
+
+The UI supports exporting filtered pages. Exporting the entire 1.4M record dataset in a single request can time out or exhaust server memory. Recommended approach:
+
+1. Use server-side streaming to generate the CSV in chunks (planned improvement), or
+2. Export filtered subsets (date ranges) and concatenate client-side if necessary.
+
+### Favicon / Replit logo note
+
+If you previously saw a Replit logo as the favicon, that was coming from a `favicon.png` in the `client/public` folder and/or development Vite plugins. The repository now removes that favicon. If you still see the Replit icon in your browser, clear the browser cache or do a hard refresh (Ctrl+Shift+R). If you want a custom icon, add `client/public/favicon.png` and restore the `<link rel="icon" ...>` tag in `client/index.html`.
+
+### Video walkthrough placeholder
+
+Add your uploaded walkthrough video link here once you publish it (YouTube unlisted or Google Drive link):
+
+[Link to 5-minute video demonstration will be added here]
 
 ## 🎨 Design System
 

@@ -248,12 +248,71 @@ export class DatabaseStorage implements IStorage {
       speed: Number(row.speed || 0),
     }));
 
+    // Top pickup locations (cluster nearby coordinates)
+    const pickupData = await db
+      .select({
+        latitude: trips.pickupLatitude,
+        longitude: trips.pickupLongitude,
+      })
+      .from(trips)
+      .limit(5000);
+
+    // Simple grid-based clustering (0.01 degree = ~1km)
+    const locationClusters: { [key: string]: number } = {};
+    pickupData.forEach((row) => {
+      const lat = Number(row.latitude || 0);
+      const lon = Number(row.longitude || 0);
+      // Round to 2 decimal places for clustering
+      const clusterKey = `${lat.toFixed(2)},${lon.toFixed(2)}`;
+      locationClusters[clusterKey] = (locationClusters[clusterKey] || 0) + 1;
+    });
+
+    // Get top 10 pickup locations
+    const topPickupLocations = Object.entries(locationClusters)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 10)
+      .map(([key, count]) => {
+        const [lat, lon] = key.split(',').map(Number);
+        return {
+          latitude: lat,
+          longitude: lon,
+          tripCount: count,
+        };
+      });
+
+    // Speed vs Distance correlation (grouped data)
+    const speedDistanceData = await db
+      .select({
+        speed: trips.tripSpeed,
+        distance: trips.tripDistance,
+      })
+      .from(trips)
+      .limit(2000);
+
+    // Group into buckets for better visualization
+    const speedDistanceGroups: { [key: string]: number } = {};
+    speedDistanceData.forEach((row) => {
+      const speed = Math.floor(Number(row.speed || 0) / 5) * 5; // 5 km/h buckets
+      const distance = Math.floor(Number(row.distance || 0) / 2) * 2; // 2 km buckets
+      const key = `${speed},${distance}`;
+      speedDistanceGroups[key] = (speedDistanceGroups[key] || 0) + 1;
+    });
+
+    const speedDistanceCorrelation = Object.entries(speedDistanceGroups)
+      .map(([key, count]) => {
+        const [speed, distance] = key.split(',').map(Number);
+        return { speed, distance, tripCount: count };
+      })
+      .filter(item => item.tripCount > 2); // Filter out noise
+
     return {
       hourlyDistribution,
       dayDistribution,
       speedDistribution,
       peakHours,
       distanceVsDuration,
+      topPickupLocations,
+      speedDistanceCorrelation,
     };
   }
 }

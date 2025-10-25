@@ -1,0 +1,101 @@
+{
+  "info": {
+    "name": "Urban Mobility Explorer API",
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef0123456789",
+    "description": "Collection for testing backend APIs locally",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get Dashboard Stats",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/stats",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "stats"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Paginated Trips",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/trips?limit=50&offset=0&startDate=2022-01-01&endDate=2022-01-31&minDistance=0.1&maxDistance=100&minDuration=60&maxDuration=18000&passengerCount=1&hourOfDay=8&sortBy=pickup_datetime&sortOrder=desc",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "trips"
+          ],
+          "query": [
+            { "key": "limit", "value": "50" },
+            { "key": "offset", "value": "0" },
+            { "key": "startDate", "value": "2022-01-01" },
+            { "key": "endDate", "value": "2022-01-31" },
+            { "key": "minDistance", "value": "0.1" },
+            { "key": "maxDistance", "value": "100" },
+            { "key": "minDuration", "value": "60" },
+            { "key": "maxDuration", "value": "18000" },
+            { "key": "passengerCount", "value": "1" },
+            { "key": "hourOfDay", "value": "8" },
+            { "key": "sortBy", "value": "pickup_datetime" },
+            { "key": "sortOrder", "value": "desc" }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Insights",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/insights",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "insights"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Export CSV (filtered)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/export?startDate=2022-01-01&endDate=2022-01-31&limit=10000",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "export"
+          ],
+          "query": [
+            { "key": "startDate", "value": "2022-01-01" },
+            { "key": "endDate", "value": "2022-01-31" },
+            { "key": "limit", "value": "10000" }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

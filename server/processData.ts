@@ -6,10 +6,11 @@
  *   npm run process-data full     - Process entire dataset
  */
 
+import 'dotenv/config';
 import { processCSVFile, processSampleData } from './dataProcessor';
 import path from 'path';
 
-const CSV_FILE_PATH = path.join(process.cwd(), 'attached_assets', 'train_1761323433432.csv');
+const CSV_FILE_PATH = path.join(process.cwd(), 'train.csv');
 
 async function main() {
   const args = process.argv.slice(2);
